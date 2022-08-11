@@ -31,6 +31,10 @@ DOCUMENTATION = """
       description: Vault path to be read.
       type: str
       required: True
+    wrap_ttl:
+      description: Wrap the read secret with the given ttl.
+      type: str
+      required: False
 """
 
 EXAMPLES = """
@@ -85,7 +89,7 @@ else:
 def run_module():
     argspec = HashiVaultModule.generate_argspec(
         path=dict(type='str', required=True),
-        wrap_ttl=dict(type='str')
+        wrap_ttl=dict(type='str'),
     )
 
     module = HashiVaultModule(
