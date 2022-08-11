@@ -85,6 +85,7 @@ else:
 def run_module():
     argspec = HashiVaultModule.generate_argspec(
         path=dict(type='str', required=True),
+        wrap_ttl=dict(type='str')
     )
 
     module = HashiVaultModule(
@@ -99,6 +100,7 @@ def run_module():
         )
 
     path = module.params.get('path')
+    wrap_ttl = module.params.get('wrap_ttl')
 
     module.connection_options.process_connection_options()
     client_args = module.connection_options.get_hvac_connection_options()
@@ -111,7 +113,7 @@ def run_module():
         module.fail_json(msg=to_native(e), exception=traceback.format_exc())
 
     try:
-        data = client.read(path)
+        data = client.read(path, wrap_ttl=wrap_ttl)
     except hvac.exceptions.Forbidden as e:
         module.fail_json(msg="Forbidden: Permission Denied to path '%s'." % path, exception=traceback.format_exc())
 
